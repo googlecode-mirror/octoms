@@ -1,0 +1,1 @@
+1339668106.429,"10:01:46","Warning #2 'http_build_query() [<a href='function.http-build-query'>function.http-build-query</a>]: Parameter 1 expected to be Array or Object.  Incorrect value given'","D:\Server\www\octoms\core\libraries\oms\request.inc",110,"/octoms/","array (  'debug:mail@address_com' => '',)","array ()",127.0.0.1,
