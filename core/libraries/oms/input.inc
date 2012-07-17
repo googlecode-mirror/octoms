@@ -112,10 +112,10 @@
 				$sg = trim(strtoupper($superGlobal));
 				switch ($sg)
 				{
-					case 'GET':		$sg = $_GET; break;
-					case 'POST':	$sg = $_POST; break;
-					case 'SERVER':	$sg = $_SERVER; break;
-					case 'ENV':		$sg = $_ENV; break;
+					case 'GET':		$sg = isset($_GET)?$_GET:array(); break;
+					case 'POST':	$sg = isset($_POST)?$_POST:array(); break;
+					case 'SERVER':	$sg = isset($_SERVER)?$_SERVER:array(); break;
+					case 'ENV':		$sg = isset($_ENV)?$_ENV:array(); break;
 					default: $sg = array();
 				}
 			}
@@ -189,7 +189,7 @@
 		 */
 		function get($var=NULL,$clean=array())
 		{
-			if ($var === true) return array_keys($_GET);
+			if ($var === true) return isset($_GET)?array_keys($_GET):null;
 			if ($var === null) return (isset($_GET) && count($_GET)>0)?true:false;
 			$r = func_get_args();if(!isset($r[2]))$var=$this->sg('get',$var);
 			
@@ -290,7 +290,7 @@
 		 */
 		function post($var=NULL,$clean=array())
 		{
-			if ($var === true) return array_keys($_POST);
+			if ($var === true) return isset($_POST)?array_keys($_POST):null;
 			if ($var === null) return (isset($_POST)&&count($_POST)>0)?true:false;
 			$r = func_get_args();if(!isset($r[2]))$var=$this->sg('post',$var);
 			

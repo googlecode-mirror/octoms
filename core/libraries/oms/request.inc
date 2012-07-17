@@ -107,18 +107,21 @@
 				
 				// Set the data
 				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query((array)$data));
 			}
 			elseif ($method == 'get')
 			{
 				// Set URL
-				curl_setopt($ch, CURLOPT_URL, str_replace(' ', '%20', $url.'?'.http_build_query($data)));
+				curl_setopt($ch, CURLOPT_URL, str_replace(' ', '%20', $url.'?'.http_build_query((array)$data)));
 			}
 			else 
 			{
 				// Set URL
 				curl_setopt($ch, CURLOPT_URL, str_replace(' ', '%20', $url));
 			}
+			
+			// NO SSL verification
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			
 			// Set the headers
 			if (!is_null($headers) && is_array($headers))
@@ -144,6 +147,10 @@
 			
 			// Return the content
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
+			
+			// Don't allow infinite waiting time
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 8);
 			
 			// Grab URL and pass it to the browser
 			$r = curl_exec($ch);
@@ -215,7 +222,7 @@
 				if (in_array($method = strtoupper((string)$method), $this->http_methods))
 				{
 					$p['http']['method'] = $method;
-					$p['http']['content'] = http_build_query($data);
+					$p['http']['content'] = http_build_query((array)$data);
 					$headers['Content-type'] = 'application/x-www-form-urlencoded';
 				}
 			}

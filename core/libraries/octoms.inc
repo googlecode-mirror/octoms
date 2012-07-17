@@ -100,7 +100,7 @@
 		 * # load the 'test' model as 't2' from the 's' stage
 		 * $this->_('test',OMS_M,'t2','s');
 		 * # etc. (see the $type parameter)
-		 * @link http://octoms.com/doc/octoms/caller
+		 * 
 		 * @method _()
 		 * @param string $object - the object/helper to call
 		 * @param int $type - the object type<ul>
@@ -112,11 +112,12 @@
 		 * </ul>
 		 * @param string $name - desired name
 		 * @param string $stage - optional stage to load the model from
+		 * @param bool $forceStage - load the optional stage model even if this is called from a valid controller
 		 * @return object/boolean
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
-		public final function _($object=NULL,$type=OMS_CL,$name=NULL,$stage='')
+		public final function _($object=NULL,$type=OMS_CL,$name=NULL,$stage='',$forceStage=false)
 		{	
 			// Format the object's name
 			if (empty($object)) 
@@ -139,7 +140,7 @@
 			switch ($type){
 				case OMS_L: $f = APP_LIB . DS . $object . EXT; break;
 				case OMS_H: $f = APP_HELP . DS . $object . EXT; break;
-				case OMS_M:	{if (strpos($i[0]['file'],'controllers') === FALSE && strpos($i[0]['file'],'models') === FALSE) $f = STAGES.DS.$stage.DS.'models'.DS.$object.EXT; else $f=preg_replace('/^(.*?)(controllers|models).*?$/', '$1models'.DS.$object.EXT, $i[0]['file']);break;}
+				case OMS_M:	{if ((strpos($i[0]['file'],'controllers') === FALSE && strpos($i[0]['file'],'models') === FALSE)||$forceStage) $f = STAGES.DS.$stage.DS.'models'.DS.$object.EXT; else $f=preg_replace('/^(.*?)(controllers|models).*?$/', '$1models'.DS.$object.EXT, $i[0]['file']);break;}
 				case OMS_CL: $f = CORE_LIB . DS . 'oms' . DS . $object . EXT; break;
 				case OMS_CH: $f = CORE_HELP . DS . $object . EXT; break;
 			}
@@ -332,7 +333,7 @@
 			if (ENVIRONMENT || debugging()) return $this;
 			
 			// Clean the output buffer
-			@ob_end_clean();
+			while(@ob_end_clean());
 			
 			$info = new stdClass();
 			
@@ -451,7 +452,7 @@
 			);
 			
 			// Clean the output buffer
-			ob_end_clean();
+			while(@ob_end_clean());
 
 			// Export the data
 			header('Content-type:text/plain',true);

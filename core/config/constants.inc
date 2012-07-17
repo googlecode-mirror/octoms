@@ -18,6 +18,7 @@
 	ini_set('mbstring.http_input', 'pass');
 	ini_set('mbstring.http_output', 'pass');
 	ini_set('mbstring.encoding_translation', 0);
+	@set_magic_quotes_runtime(false);
 	
 	/**
 	 * Location constants

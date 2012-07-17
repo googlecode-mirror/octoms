@@ -1,20 +1,20 @@
 <?php if(!defined('OCTOMS')){header('HTTP/1.1 403');die('{"error":"forbidden"}');}
 /*
- * @package       Fervoare.com
- * @link          http://fervoare.com
+ * @package       OctoMS.com
+ * @link          http://OctoMS.com
  * @copyright     Copyright 2012, Valentino-Jivko Radosavlevici (http://valentino.radosavlevici.com)
  * @license       GPL v3.0 (http://www.gnu.org/licenses/gpl-3.0.txt)
  * 
  * Redistributions of files must retain the above copyright notice.
  * 
- * @since         Fervoare.com 0.0.1
+ * @since         OctoMS.com 0.0.1
  */
 	
 	/*
 	 * CSV library
 	 * 
 	 * 
-	 * @package Fervoare.com
+	 * @package OctoMS.com
 	 * @version 0.1
 	 * 
 	 * @author Valentino-Jivko Radosavlevici
@@ -27,13 +27,13 @@
 		 * 
 		 * @param array $array
 		 * @return string - CSV formatted data
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
 		protected function _arrayToCsv($array=null)
 		{
-			// Verify there is data to encrypt
+		// Verify there is data to encrypt
 			if (is_array($array) && count($array)>0)
 			{
 				// Prepare the result string
@@ -65,14 +65,14 @@
 								if (!is_string($col) && !is_numeric($col))
 								{
 									// To String
-									$col = var_export($col,true);
+									$col = serialize($col);
 								}
 								
 								// No new lines
 								$col = str_replace(array("\r\n","\r","\n"),"", $col);
 								
 								// CSV string encryption rules must be followed
-								if (preg_match('/^.*[^a-zA-Z0-9.]+.*$/i', $col))
+								if (preg_match('/^.*[^a-zA-Z0-9\.]+.*$/i', $col))
 								{
 									// Escape double quotes
 									$col = sprintf('"%s"',preg_replace('/"/i', '""', $col));
@@ -98,7 +98,7 @@
 			}
 			else
 			{
-				return "";
+				return '';
 			}
 		}// end function _arrayToCsv()
 
@@ -107,7 +107,7 @@
 		 * 
 		 * @param string $csv
 		 * @return array
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -148,8 +148,56 @@
 								$v = preg_replace('/"{2}/i', '"', $v);
 							}
 							
-							// Done
-							$line[$k] = $v;
+							// Try to unserialize the string
+							$data = @unserialize($v);
+							
+							// Is the string serialized?
+							if ($v === 'b:0;' || $data !== false)
+							{
+								$line[$k] = $data;
+							}
+							else
+							{
+							    // Is it a numeric value?
+							    if(is_numeric($v))
+							    {
+							    	// Integer?
+							    	if ($v == (int)$v)
+							    	{
+							    		$line[$k] = (int)$v;
+							    	}
+							    	// Float
+							    	else 
+							    	{
+							    		$line[$k] = (float)$v;
+							    	}
+							    }
+							    // Boolean/Null/String?
+							    else 
+							    {
+							    	// True
+							    	if ($v == 'true')
+							    	{
+							    		$line[$k] = true;
+							    	}
+							    	// False
+							    	elseif ($v == 'false')
+							    	{
+							    		$line[$k] = false;
+							    	}
+							    	// Null
+							    	elseif (strlen($v) == 0)
+							    	{
+							    		$line[$k] = null;
+							    	}
+							    	// Or some string
+							    	else 
+							    	{
+							    		$line[$k] = $v;
+							    	}
+							    }
+							}
+														
 						}
 					}
 					
@@ -168,7 +216,7 @@
 		 * 
 		 * @param string $method
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -193,7 +241,7 @@
 		 * @param string $file
 		 * @return $this
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -237,7 +285,7 @@
 		 * @param string $file
 		 * @return csv_cl_i
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -281,7 +329,7 @@
 		 * @param int $rowKey
 		 * @return csv_cl_i
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -310,7 +358,7 @@
 		 * @param int $rowKey
 		 * @return array - the required row or the entire CSV array, if $rowKey not set
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -338,7 +386,7 @@
 		 * @param array $row
 		 * @return csv_cl_i
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -367,7 +415,7 @@
 		 * @param int $rowKey
 		 * @return csv_cl_i
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -397,7 +445,7 @@
 		 * @param int $rowKey
 		 * @return csv_cl_i
 		 * @throws Exception
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -423,7 +471,7 @@
 		 * {csv_cl_i}->open('path/to/file.csv')->rowEmpty(2)->save();
 		 * 
 		 * @return csv_cl_i
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * @throws Exception
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
@@ -460,7 +508,7 @@
 	 * CSV instances
 	 * 
 	 * 
-	 * @package Fervoare.com
+	 * @package OctoMS.com
 	 * @version 0.1
 	 * 
 	 * @author Valentino-Jivko Radosavlevici
@@ -487,7 +535,7 @@
 		 * @param array $csv - csv contents
 		 * @param string $address - file location
 		 * @return csv_cl_i
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
@@ -501,7 +549,7 @@
 		 * We don't need to open another CSV file here
 		 * 
 		 * @return csv_cl_i
-		 * @package Fervoare.com
+		 * @package OctoMS.com
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */

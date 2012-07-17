@@ -14,6 +14,11 @@
 	 * Set the environment
 	 */
 	define('ENVIRONMENT', 0);	# 0 - development; 1 - production
+	
+	/**
+	 * Display the error wizard?
+	 */
+	define('ERROR_WIZARD', 1);	# 1 - yes; 0 - no
 
 	/**
 	 * Global Encryption string for the blowfish algorythm (56 characters in length)

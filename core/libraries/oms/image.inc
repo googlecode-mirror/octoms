@@ -437,11 +437,7 @@
 			$h = abs ( intval ( $y2 ) - intval ( $y1 ) );
 			
 			// Create empty holder
-			$im = imagecreatetruecolor($w,$h);
-			
-			// Create a nice transparent background; autoloads
-			$bkg = imagecolorallocate ( $im, 255, 255, 255 );
-			$bkg = imagecolortransparent ( $im, $bkg );
+			$im = $this->canvas($w,$h);
 			
 			// This is important; treats inverted cropping (bottom right to top left)
 			if ($x1 > $x2)
@@ -1093,11 +1089,7 @@
 			}
 			
 			// Create a new canvas
-			$canvas = imagecreatetruecolor($width, $height);
-			
-			// Create a transparent color
-			$transparent = imagecolortransparent($canvas,imagecolorallocatealpha($canvas, 255, 255, 255, 127));
-			imagefill($canvas, 0, 0, $transparent);
+			$canvas = $this->canvas($width,$height);
 			
 			// Perform the replacements
 			for ($x=0;$x<$width;$x++)
@@ -1191,11 +1183,7 @@
 			}
 			
 			// Create the holder
-			$holder = imagecreatetruecolor ( $width, $height );
-			
-			// Create a nice transparent background; autoloads
-			$bkg = imagecolorallocate ( $holder, 255, 255, 255 );
-			$bkg = imagecolortransparent ( $holder, $bkg );
+			$holder = $this->canvas($width,$height);
 			
 			// Perform some magic
 			if(FALSE === $r = imagecopyresized ( $holder, $resource, 0, 0, 0, 0, $width, $height, $resourceW, $resourceH ))
@@ -1274,9 +1262,7 @@
 			$canvas_height=round($max_y-$min_y);
 			
 			// Create the image
-			$canvas=imagecreatetruecolor($canvas_width,$canvas_height);
-			imagealphablending($canvas, false);
-			imagesavealpha($canvas, true);
+			$canvas=$this->canvas($canvas_width,$canvas_height);
 			
 			// Prepare the background color information
 			if (!is_null($bkgColor))
@@ -1443,11 +1429,7 @@
 				if ($mode == 'vertical')
 				{
 					// Create the holder
-					$holder = imagecreatetruecolor ( $dw > $sw ? $dw : $sw, $dh + $sh );
-					
-					// Make it transparent
-					$bkg = imagecolorallocate ( $holder, 255, 255, 255 );
-					$bkg = imagecolortransparent ( $holder, $bkg );
+					$holder = $this->canvas( $dw > $sw ? $dw : $sw, $dh + $sh );
 					
 					// Copy first image onto holder
 					if(FALSE === $r = imagecopymerge ( $holder, $args [$i], 0, 0, 0, 0, $dw, $dh, 100 ))
@@ -1464,11 +1446,7 @@
 				elseif ($mode == 'horizontal')
 				{
 					// Create the holder
-					$holder = imagecreatetruecolor ( $dw + $sw, $dh > $sh ? $dh : $sh );
-					
-					// Make it transparent
-					$bkg = imagecolorallocate ( $holder, 255, 255, 255 );
-					$bkg = imagecolortransparent ( $holder, $bkg );
+					$holder = $this->canvas ( $dw + $sw, $dh > $sh ? $dh : $sh );
 					
 					// Copy first image onto holder
 					if(FALSE === $r = imagecopymerge ( $holder, $args [$i], 0, 0, 0, 0, $dw, $dh, 100 ))
@@ -1567,7 +1545,7 @@
 			}
 			
 			// Create empty drawing
-			$textImage = imagecreatetruecolor( $width, $height );
+			$textImage = $this->canvas( $width, $height );
 			
 			// Get the RGB Array
 			$c = $this->hexToRgb ( $color );
@@ -1638,7 +1616,7 @@
 			}
 			
 			// Create a 200x200 image
-			if(FALSE === $canvas = imagecreatetruecolor($width, $height))
+			if(FALSE === $canvas = $this->canvas($width, $height))
 			{
 				throw new Exception("Try using a smaller image or increasing the PHP memory limit.");
 			}
@@ -1687,7 +1665,7 @@
 			if ($truecolor) 
 			{
 				// Create a blank canvas
-				$new = imagecreatetruecolor($sizeX,$sizeY);
+				$new = $this->canvas($sizeX,$sizeY);
 				
 				// Save the resource
 				if(FALSE === imagecopyresampled($new,$resource,0,0,0,0,$sizeX,$sizeY,$sizeX,$sizeY))

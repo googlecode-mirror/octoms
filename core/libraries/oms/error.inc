@@ -60,9 +60,13 @@
 				ini_set('display_errors', 0);
 			}
 
-			// Set the error handler and the exception handler
-			set_error_handler(array($this,'error_h'),E_ALL);
-			set_exception_handler(array($this,'exception_h'));
+			// Error wizard
+			if (ERROR_WIZARD)
+			{			
+				// Set the error handler and the exception handler
+				set_error_handler(array($this,'error_h'),E_ALL);
+				set_exception_handler(array($this,'exception_h'));
+			}
 			
 		}// end function __construct()
 		
@@ -204,7 +208,7 @@
 			if (ENVIRONMENT) return true;
 			
 			// Clean the output buffer
-			@ob_end_clean();
+			while(@ob_end_clean());
 			
 			// Prepare the info class
 			$info = new stdClass();
@@ -276,7 +280,7 @@
 			if (ENVIRONMENT) return true;
 			
 			// Clean the output buffer
-			@ob_end_clean();
+			while(@ob_end_clean());
 			
 			// Prepare the info class
 			$info = new stdClass();
@@ -363,8 +367,8 @@
 						$file,
 						$line,
 						$_SERVER['REQUEST_URI'],
-						var_export($_GET,true),
-						var_export($_POST,true),
+						$_GET,
+						$_POST,
 						$_SERVER['REMOTE_ADDR'],
 						isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:null
 					)),
@@ -402,7 +406,7 @@
 			if (empty($no)) throw new Exception('You must set a valid HTTP/1.1 error response code');
 		    
 			// Hide the output buffer
-			@ob_end_clean();
+			while(@ob_end_clean());
 			
 			// Set the header
 			$info = new stdClass();

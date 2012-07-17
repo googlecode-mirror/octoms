@@ -24,6 +24,13 @@
 	class sql_cl extends octoms
 	{
 		/**
+		 * Long query step (in seconds)
+		 * All queries that take longer than this to execute will be logged as errors
+		 * @var float
+		 */
+		const long_query_step = 1;
+		
+		/**
 		 * The MySQL connection instance
 		 * @var resource
 		 */
@@ -679,7 +686,18 @@
 		 */
 		function unserialize($str='')
 		{
-			return @unserialize($this->decompress(base64_decode($str)));
+			// Get the unserialized data
+			$data = @unserialize($str = $this->decompress(base64_decode($str)));
+			
+			// Check if it is real
+			if ($str === 'b:0;' || $data !== false) 
+			{
+				return $data;
+			}
+			else
+			{
+				return null;
+			}
 			
 		}// end function unserialize()
 		
@@ -1016,8 +1034,44 @@
 			}
 			else 
 			{
+			// Get the start time
+				$sql_time = microtime(true);
+				
 				// Execute the query
 				$this->result = mysql_query($q,self::$instance);
+				
+				// Total execution time
+				$sql_time = microtime(true) - $sql_time;
+				
+				// Long query?
+				if ($sql_time >= sql_cl::long_query_step)
+				{
+					// Get the caller information
+					$info = debug_backtrace();
+					
+					// Get the file and line
+					if (isset($info[0]['file']))
+					{
+						$file = $info[0]['file'];
+						$line = $info[0]['line'];
+					}
+					else 
+					{
+						$file = __FILE__;
+						$line = __LINE__;
+					}
+					
+					// Log this as an error
+					octoms('error',OMS_CL)->log(
+						sprintf(
+							'Long query (%ss): "%s"',
+							number_format($sql_time,6),
+							$q
+						),
+						$file,
+						$line
+					);
+				}
 			}
 			
 			// Something went wrong

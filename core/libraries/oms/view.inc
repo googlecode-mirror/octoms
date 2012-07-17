@@ -123,7 +123,7 @@
 			// Get the helper
 			$helper = new view_cl_helper($file,$variables);
 			
-			// Load the file
+			// Load the file then destroy the data
 			return $helper->l();
 			
 		}// end function load()
@@ -247,7 +247,6 @@
 		var $data = array();
 		var $file = null;
 		var $loaded = false;
-		var $result = null;
 		
 		function __construct($file=null,$data=array())
 		{
@@ -270,7 +269,6 @@
 			if (!$this->loaded)
 			{
 				$this->loaded = true;
-				$this->result = false;
 				
 				if (file_exists($this->file))
 				{
@@ -292,12 +290,21 @@
 					// Load the file
 					require $this->file;
 	
+					// Clean the variables
+					unset($this->data);
+					unset($this->file);
+					
 					// Clean the string of the UTF-8 start character
-					$this->result = preg_replace('/\x{FEFF}/iu', '', @ob_get_clean());
+					return preg_replace('/\x{FEFF}/iu', '', @ob_get_clean());
 				}
 			}
 			
-			return $this->result;
+			// Clean the variables
+			unset($this->data);
+			unset($this->file);
+			
+			// Nothing to show
+			return null;
 			
 		}// end function l()
 		

@@ -141,6 +141,39 @@
 		}// end function array_flat()
 	}
 	
+	if(!function_exists('array_is_assoc'))
+	{
+		/**
+		 * Check wether an array is associative
+		 * 
+		 * @example 
+		 * // Check if $foo is associative
+		 * // $foo=array('a','b','c');
+		 * array_is_assoc($foo); # false
+		 * // $foo=array('a','1'=>'b','2'=>'c');
+		 * array_is_assoc($foo); # true
+		 * // $foo=array('a'=>'b');
+		 * array_is_assoc($foo); # true
+		 * 
+		 * @param array $array
+		 * @return boolean - True if the array is associative
+		 * 
+		 * @author Valentino-Jivko Radosavlevici
+		 */
+		function array_is_assoc($array)
+		{
+			// Make sure this is an array
+			if (!is_array($array)) 
+			{
+				return false;
+			}
+			
+			// Check associativity
+			return (bool)count(array_filter(array_keys($array), 'is_string'));
+			
+		}// end function array_is_assoc()
+	}
+	
 	if(!function_exists('array_structure'))
 	{
 		/**
