@@ -27,21 +27,12 @@
 		/**
 		 * Class constructor
 		 * 
-		 * @link http://octoms.com/doc/test/__construct
-		 * 
-		 * @param 
-		 * @return test
 		 * 
 		 * @author Valentino-Jivko Radosavlevici
 		 */
 		function index()
 		{
-			$this->_('request');
-			
-			// Load google
-			$this->request->load('http://google.com');
-			
-//			var_dump($this->request->body);
+			print 'Hello world!';
 			
 		}// end function index()
 		
