@@ -10,6 +10,6 @@
  * @since         OctoMS 0.0.1
  */
 	
-	$route['(:any)'] = 'test/test/index$1';
+	$route['(.*)'] = 'test/test/index/$1';
 	
 /* End Of File <routes.inc> */

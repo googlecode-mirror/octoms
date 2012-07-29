@@ -56,7 +56,7 @@
   		<span class="tip" title="Click to view/hide the method's source code."><i>Source code</i></span><br/>
   		<div class="b">
   			<?php 
-  				print highlight(
+  				print @highlight(
 					$info->code,
 					null,
 					array('class'=>'code')

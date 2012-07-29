@@ -19,7 +19,7 @@
 	 * 
 	 * @author Valentino-Jivko Radosavlevici
 	 */
-	class csv_cl
+	class csv_cl extends octoms
 	{		
 		
 		/*

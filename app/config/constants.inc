@@ -18,7 +18,7 @@
 	/**
 	 * Display the error wizard?
 	 */
-	define('ERROR_WIZARD', 1);	# 1 - yes; 0 - no
+	define('ERROR_WIZARD', 0);	# 1 - yes; 0 - no
 
 	/**
 	 * Global Encryption string for the blowfish algorythm (56 characters in length)

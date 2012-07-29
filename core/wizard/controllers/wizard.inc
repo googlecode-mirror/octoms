@@ -33,6 +33,9 @@
 			// Load the input library
 			$this->_('input');
 			
+			// Load the HTML helper
+			$this->_('html',OMS_CH);
+			
 			// Load the model
 			$this->_('wizard',OMS_M,'w');
 			
